@@ -1,0 +1,65 @@
+@import "../../assets/tabs";
+
+.dashboard {
+  display : flex;
+
+  &-currency-control {
+    flex-basis: 40%;
+    margin: 20px;
+    label {
+      margin: 1.8em 0.3em 0.5em;
+      display: block;
+      color : #029c34;
+    }
+  }
+
+  &-data-view {
+    margin: 20px;
+    width: 100%;
+  }
+
+  .currency-converter {
+    &-amount {
+      display: flex;
+      align-items: center;
+      margin: 0.3em 0 1.3em;
+      label {
+        margin-right: 10px;
+        color : #029c34;
+      }
+
+      input {
+        width: 100px;
+      }
+    }
+
+    &-item {
+      padding: 0.8em 1.2em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 0.6em;
+      font-size: 1.2em;
+      display: flex;
+      justify-content: space-between;
+      width: 350px;
+
+      &-base {
+        display: flex;
+        align-items: center;
+        color : #fc7f03
+      }
+
+      &-target {
+        display: flex;
+        align-items: center;
+        color : #034efc;
+      }
+
+      &-swap-icon {
+        color :#029c34;
+        font-size: 1.6em;
+        cursor: pointer;
+      }
+    }
+  }
+}

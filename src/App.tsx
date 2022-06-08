@@ -1,26 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import Dashboard from "./layouts/dashboard/Dashboard";
+import { setCurrencyListReducer } from "./slices/currencySlice";
+import { getCurrencies } from "./utils/apiUtils";
+import { getCurrencySelectOptions } from "./utils/helpers";
+import  "./App.scss";
 
-function App() {
+const App: React.FC = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    getCurrencies().then((response) =>
+      dispatch(setCurrencyListReducer(getCurrencySelectOptions(response)))
+    );
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="main">
+      <Dashboard />
     </div>
   );
-}
+};
 
 export default App;
