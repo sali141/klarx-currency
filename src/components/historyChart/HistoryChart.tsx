@@ -30,7 +30,7 @@ export const HistoryChart = () => {
       const datesList = [];
       datesList.push(currDate);
       for (let i = 1; i < INIT_NUMBER_OF_HISTORY_DATES; i++) {
-        datesList.push(getPrevNextDate(currDate, false, i));
+        datesList.unshift(getPrevNextDate(currDate, false, i));
       }
 
       if (

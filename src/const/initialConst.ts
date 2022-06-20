@@ -1,3 +1,3 @@
 export const INIT_BASE_CURRENCY = "EUR"
 export const INIT_TARGET_CURRENCIES = ["CHF", "USD"]
-export const INIT_NUMBER_OF_HISTORY_DATES = 7;
+export const INIT_NUMBER_OF_HISTORY_DATES = 14;
