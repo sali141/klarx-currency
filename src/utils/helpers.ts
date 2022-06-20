@@ -40,7 +40,7 @@ export const convertApiResponseToBaseCurreny = (
     if (currency !== base) {
       convertedRates.push({
         currency,
-        amount: (Number(response.rates[currency]) * usdBaseRate).toString(),
+        amount: (Number(response.rates[currency]) * usdBaseRate).toFixed(2),
         isSwaped: false,
       });
     }

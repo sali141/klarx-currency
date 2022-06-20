@@ -4,7 +4,15 @@ import {
   IoIosArrowDroprightCircle,
 } from "react-icons/io";
 import { useSelector } from "react-redux";
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  LabelList,
+  XAxis,
+  YAxis,
+} from "recharts";
+import { LBL_SELECT_BASE_CURRENCY } from "../../const/labelConst";
 import { ERR_MISSING_DATA, ERR_RATES_FETCH } from "../../const/messagesConst";
 import { Loader } from "../../shared/loader/Loader";
 import { TStore } from "../../store/store";
@@ -91,7 +99,9 @@ const DailyRatesChart = (props: Props) => {
             <div>
               {currDate !== convertDatetoString(new Date()) && (
                 <IoIosArrowDroprightCircle
-                  onClick={() => setCurrDate(getPrevNextDate(currDate, true, 1))}
+                  onClick={() =>
+                    setCurrDate(getPrevNextDate(currDate, true, 1))
+                  }
                   className="date-navigator-icon"
                 />
               )}
@@ -100,16 +110,29 @@ const DailyRatesChart = (props: Props) => {
           {isLoading ? (
             <Loader />
           ) : (
-            <div className="daily-rate-chart">
-              {dailyRates && dailyRates.length > 0 && (
-                <BarChart width={700} height={400} data={dailyRates}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="currency" />
-                  <YAxis />
-                  <Bar dataKey="amount" fill="#9db5ed" />
-                </BarChart>
-              )}
-            </div>
+            <>
+              <div className="daily-rate-chart">
+                {dailyRates && dailyRates.length > 0 && (
+                  <BarChart width={700} height={400} data={dailyRates}>
+                    <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                    <XAxis dataKey="currency" tick={{ fontSize: 12 }} />
+                    <YAxis tick={{ fontSize: 12 }} />
+                    <Bar dataKey="amount" fill="#9db5ed">
+                      <LabelList
+                        dataKey="amount"
+                        position="top"
+                        style={{
+                          textAnchor: "middle",
+                          fontSize: "80%",
+                          fill: "rgba(0, 0, 0, 0.87)",
+                        }}
+                      />
+                    </Bar>
+                  </BarChart>
+                )}
+              </div>
+              <div style={{textAlign:'center'}}>{LBL_SELECT_BASE_CURRENCY} : {baseCurrency.value}</div>
+            </>
           )}
         </>
       )}

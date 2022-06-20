@@ -15,5 +15,5 @@ export type TDateRates = {
 }
 
 export type TChartDateRates = {
-  [name: string]:  string
+  [key: string]:  string
 }

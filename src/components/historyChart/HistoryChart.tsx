@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 import { INIT_NUMBER_OF_HISTORY_DATES } from "../../const/initialConst";
+import { LBL_SELECT_BASE_CURRENCY } from "../../const/labelConst";
 import { ERR_MISSING_DATA, ERR_RATES_FETCH } from "../../const/messagesConst";
 import { Loader } from "../../shared/loader/Loader";
 import { TStore } from "../../store/store";
@@ -13,7 +14,7 @@ import {
   getPrevNextDate,
   getRandomColor,
 } from "../../utils/helpers";
-import "./HistoryChart.scss"
+import "./HistoryChart.scss";
 
 export const HistoryChart = () => {
   const { baseCurrency, targetCurrencies } = useSelector(
@@ -89,32 +90,37 @@ export const HistoryChart = () => {
           {isLoading ? (
             <Loader />
           ) : (
-            <div className="daily-rate-chart">
-              <LineChart width={800} height={500} data={rates}>
-                <XAxis
-                  dataKey="date"
-                  tick={{ fontSize: 12 }}
-                  angle={30}
-                  dx={15}
-                  dy={7}
-                  minTickGap={-100}
-                  axisLine={false}
-                />
-                <YAxis tick={{ fontSize: 12 }} />
-                <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                {Object.keys(rates[0]).map(
-                  (line) =>
-                    line !== "date" && (
-                      <Line
-                        key={line}
-                        type="monotone"
-                        dataKey={line}
-                        stroke={getRandomColor()}
-                      />
-                    )
-                )}
-              </LineChart>
-            </div>
+            <>
+              <div className="daily-rate-chart">
+                <LineChart width={800} height={500} data={rates}>
+                  <XAxis
+                    dataKey="date"
+                    tick={{ fontSize: 12 }}
+                    angle={30}
+                    dx={15}
+                    dy={7}
+                    minTickGap={-100}
+                    axisLine={false}
+                  />
+                  <YAxis tick={{ fontSize: 12 }} />
+                  <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                  {Object.keys(rates[0]).map(
+                    (line) =>
+                      line !== "date" && (
+                        <Line
+                          key={line}
+                          type="monotone"
+                          dataKey={line}
+                          stroke={getRandomColor()}
+                        />
+                      )
+                  )}
+                </LineChart>
+              </div>
+              <div style={{ textAlign: "center" }}>
+                {LBL_SELECT_BASE_CURRENCY} : {baseCurrency.value}
+              </div>
+            </>
           )}
         </>
       )}
