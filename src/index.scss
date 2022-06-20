@@ -1,12 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import "./assets/colors";
 
 body {
   margin: 40px 0 20px;
   font-family: 'Roboto', sans-serif;
-  font-size: 20px;
+  font-size: 18px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color : #333;
+  color : $theme-text;
 }
 
 code {
@@ -15,9 +16,29 @@ code {
 }
 
 input {
-  border: 1px solid #ccc;
+  border: 1px solid $theme-line-gray;
   border-radius: 4px;
   padding: 0.5em;
   font-size: 1em;
+  color : $theme-text;
 }
 
+input:focus-visible {
+  outline: $theme-input-focus auto 1px;
+}
+
+.error-message {
+  color: $theme-error-text;
+  font-size: 14px;
+  text-align: center;
+  border : 1px solid $theme-error-border;
+  padding: 0.8em;
+  border-radius: 4px;
+  background-color: $theme-error-background;
+}
+
+.field-error {
+  color: $theme-error-text;
+  font-size: 14px;
+  padding: 0.8em;
+}

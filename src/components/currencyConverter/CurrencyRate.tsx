@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineSwap } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import { TStore } from "../../store/store";
@@ -13,9 +13,14 @@ type Props = {
 const CurrencyRate = (props: Props) => {
   const { baseCurrency } = useSelector((state: TStore) => state.currency);
   const { rate, compareAmount, swapRates } = props;
+  const [amount, setAmount] = useState<number>(compareAmount);
+
+  useEffect(() => {
+    setAmount(compareAmount);
+  }, [compareAmount]);
 
   return (
-    <div>
+    <>
       <div className="currency-converter-item">
         <div
           className={
@@ -24,7 +29,15 @@ const CurrencyRate = (props: Props) => {
               : "currency-converter-item-base"
           }
         >
-          {compareAmount} {" "}
+          <input
+            type="number"
+            className="currency-converter-item-amount"
+            value={amount}
+            min={1}
+            onChange={(e) => {
+              setAmount(Number(e.target.value));
+            }}
+          />
           {rate.isSwaped ? rate.currency : baseCurrency.value}
         </div>
         <AiOutlineSwap
@@ -41,15 +54,13 @@ const CurrencyRate = (props: Props) => {
           }
         >
           {rate.isSwaped
-            ? (compareAmount / Number(rate.amount)).toFixed(2) +
+            ? (amount / Number(rate.amount)).toFixed(2) +
               " " +
               baseCurrency.value
-            : (compareAmount * Number(rate.amount)).toFixed(2) +
-              " " +
-              rate.currency}
+            : (amount * Number(rate.amount)).toFixed(2) + " " + rate.currency}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

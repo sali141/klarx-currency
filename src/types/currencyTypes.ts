@@ -14,7 +14,6 @@ export type TCurrencyState = {
 }
 
 export type TCurrencyRate = {
-  // [key: string]: string;
   currency : string;
   amount : string;
   isSwaped : boolean;

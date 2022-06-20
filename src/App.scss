@@ -1,6 +1,8 @@
+@import "./assets/colors";
+
 .main {
   padding : 0.5em;
-  border : 1px solid #ccc;
+  border : 1px solid $theme-line-gray;
   min-height: 60vh;
   width: 90%;
   margin: 0 auto;

@@ -1,0 +1,25 @@
+@import "../../assets/colors";
+
+.date-navigator {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.3em 0 2.5em;
+  font-size: 1.2em;
+  align-items: center;
+
+  &-title {
+    color: $theme-secondary-alt;
+  }
+
+  &-icon {
+    font-size: 40px;
+    color: $theme-primary;
+    cursor: pointer;
+  }
+}
+
+.daily-rate-chart {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20px;
+}
