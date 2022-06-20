@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import Select from "react-select";
 import { TCurrency } from "../../types/currencyTypes";
 
@@ -23,4 +23,4 @@ const CurrencySelector: React.FC<Props> = (props: Props) => {
   );
 };
 
-export default CurrencySelector;
+export default memo(CurrencySelector);

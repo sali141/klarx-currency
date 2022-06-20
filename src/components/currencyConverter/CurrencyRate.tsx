@@ -10,7 +10,7 @@ type Props = {
   swapRates: () => void;
 };
 
-const CurrencyRate = (props: Props) => {
+const CurrencyRate: React.FC<Props> = (props: Props) => {
   const { baseCurrency } = useSelector((state: TStore) => state.currency);
   const { rate, compareAmount, swapRates } = props;
   const [amount, setAmount] = useState<number>(compareAmount);

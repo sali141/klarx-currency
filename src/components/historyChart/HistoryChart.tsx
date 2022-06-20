@@ -4,7 +4,7 @@ import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 import { INIT_NUMBER_OF_HISTORY_DATES } from "../../const/initialConst";
 import { LBL_SELECT_BASE_CURRENCY } from "../../const/labelConst";
 import { ERR_MISSING_DATA, ERR_RATES_FETCH } from "../../const/messagesConst";
-import { Loader } from "../../shared/loader/Loader";
+import Loader from "../../shared/loader/Loader";
 import { TStore } from "../../store/store";
 import { TChartDateRates } from "../../types/chartTypes";
 import { getMultipleHistoricalRates } from "../../utils/apiUtils";
@@ -16,7 +16,7 @@ import {
 } from "../../utils/helpers";
 import "./HistoryChart.scss";
 
-export const HistoryChart = () => {
+export const HistoryChart: React.FC = () => {
   const { baseCurrency, targetCurrencies } = useSelector(
     (state: TStore) => state.currency
   );

@@ -11,9 +11,9 @@ import {
 } from "../../utils/helpers";
 import CurrencyRate from "./CurrencyRate";
 import "./CurrencyConverter.scss";
-import { Loader } from "../../shared/loader/Loader";
+import Loader from "../../shared/loader/Loader";
 
-const CurrencyConverter = () => {
+const CurrencyConverter: React.FC = () => {
   const { baseCurrency, targetCurrencies } = useSelector(
     (state: TStore) => state.currency
   );

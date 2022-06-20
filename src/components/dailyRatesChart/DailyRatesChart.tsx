@@ -14,7 +14,7 @@ import {
 } from "recharts";
 import { LBL_SELECT_BASE_CURRENCY } from "../../const/labelConst";
 import { ERR_MISSING_DATA, ERR_RATES_FETCH } from "../../const/messagesConst";
-import { Loader } from "../../shared/loader/Loader";
+import Loader from "../../shared/loader/Loader";
 import { TStore } from "../../store/store";
 import { TCurrencyRate } from "../../types/currencyTypes";
 import { getHistoricalRates } from "../../utils/apiUtils";
@@ -31,7 +31,7 @@ type Props = {
   setCurrDate: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const DailyRatesChart = (props: Props) => {
+const DailyRatesChart: React.FC<Props> = (props: Props) => {
   const { currDate, setCurrDate } = props;
   const [isLoading, setIsLoading] = useState(true);
   const [pageError, setPageError] = useState<string | null>(null);
@@ -131,7 +131,9 @@ const DailyRatesChart = (props: Props) => {
                   </BarChart>
                 )}
               </div>
-              <div style={{textAlign:'center'}}>{LBL_SELECT_BASE_CURRENCY} : {baseCurrency.value}</div>
+              <div style={{ textAlign: "center" }}>
+                {LBL_SELECT_BASE_CURRENCY} : {baseCurrency.value}
+              </div>
             </>
           )}
         </>
