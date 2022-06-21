@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
+import { CartesianGrid, Legend, Line, LineChart, XAxis, YAxis } from "recharts";
 import { INIT_NUMBER_OF_HISTORY_DATES } from "../../const/initialConst";
 import { LBL_SELECT_BASE_CURRENCY } from "../../const/labelConst";
 import { ERR_MISSING_DATA, ERR_RATES_FETCH } from "../../const/messagesConst";
@@ -110,13 +110,15 @@ export const HistoryChart: React.FC = () => {
                     <XAxis
                       dataKey="date"
                       tick={{ fontSize: 12 }}
-                      angle={30}
+                      angle={45}
                       dx={15}
-                      dy={7}
-                      minTickGap={-100}
+                      dy={20}
+                      minTickGap={-300}
                       axisLine={false}
+                      height={80}
                     />
                     <YAxis tick={{ fontSize: 12 }} />
+                    <Legend  verticalAlign="top" align="right"/>
                     <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                     {Object.keys(state.rates[0]).map(
                       (line) =>
@@ -126,6 +128,7 @@ export const HistoryChart: React.FC = () => {
                             type="monotone"
                             dataKey={line}
                             stroke={getRandomColor()}
+                          
                           />
                         )
                     )}
