@@ -32,7 +32,6 @@ const CurrencyControl: React.FC<Props> = (props: Props) => {
     {baseCurrency: {label :"" , value : ""}, targetCurrencies: []}
   )
 
-
   useEffect(() => {
     setState({baseCurrency : getInitialBaseCurrency(currencies) , targetCurrencies : getInitialTargetCurrencies(currencies)})
   }, [currencies]);
