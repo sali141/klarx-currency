@@ -1,4 +1,4 @@
-import React, { Reducer, useEffect, useReducer } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
   LBL_SELECT_BASE_CURRENCY,
@@ -21,17 +21,17 @@ type Props = {
 };
 
 type State = {
-  baseCurrency : TCurrency;
+  baseCurrency : TCurrency | undefined;
   targetCurrencies : TCurrency[]
 }
 
 const CurrencyControl: React.FC<Props> = (props: Props) => {
   const { currencies } = props;
   const dispatch = useDispatch();
-  const [state, setState] = useReducer<Reducer<State, Partial<State>>>(
-    (state, newState) => ({...state, ...newState}),
+  const [state, setState] = useState<State>(
     {baseCurrency: {label :"" , value : ""}, targetCurrencies: []}
   )
+
 
   useEffect(() => {
     setState({baseCurrency : getInitialBaseCurrency(currencies) , targetCurrencies : getInitialTargetCurrencies(currencies)})
@@ -46,11 +46,11 @@ const CurrencyControl: React.FC<Props> = (props: Props) => {
   }, [state.targetCurrencies, dispatch]);
 
   const onBaseCurrencyChange = (e: TCurrency) => {
-    setState({baseCurrency : e})
+    setState({...state, baseCurrency : e})
   };
 
   const onTargetCurrencyChange = (e: TCurrency[]) => {
-    setState({targetCurrencies : e})
+    setState({...state, targetCurrencies : e})
   };
 
   return (

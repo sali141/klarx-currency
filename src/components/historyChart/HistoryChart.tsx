@@ -16,16 +16,26 @@ import {
 } from "../../utils/helpers";
 import "./HistoryChart.scss";
 
+type State = {
+  pageError: string | null;
+  rates: TChartDateRates[];
+  isLoading: boolean;
+};
+
 export const HistoryChart: React.FC = () => {
   const { baseCurrency, targetCurrencies } = useSelector(
     (state: TStore) => state.currency
   );
-  const [pageError, setPageError] = useState<string | null>(null);
-  const [rates, setRates] = useState<TChartDateRates[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [state, setState] = useState<State>({
+    pageError: null,
+    rates: [],
+    isLoading: true,
+  });
 
   useEffect(() => {
-    setIsLoading(true);
+    setState((s) => {
+      return { ...s, isLoading: true };
+    });
     const fetchRates = async () => {
       const currDate = convertDatetoString(new Date());
       const datesList = [];
@@ -48,9 +58,10 @@ export const HistoryChart: React.FC = () => {
             : "";
         getMultipleHistoricalRates(datesList, baseCurrency.value, targets)
           .then((response) => {
-            setIsLoading(false);
-            setRates(
-              response.map((e) => {
+            setState({
+              isLoading: false,
+              pageError: null,
+              rates: response.map((e) => {
                 return e.rates.reduce(
                   (rate, val) => {
                     return {
@@ -60,17 +71,18 @@ export const HistoryChart: React.FC = () => {
                   },
                   { date: e.date }
                 );
-              })
-            );
+              }),
+            });
           })
           .catch((e) => {
-            setIsLoading(false);
-            setPageError(ERR_RATES_FETCH);
+            setState({
+              isLoading: false,
+              pageError: ERR_RATES_FETCH,
+              rates: [],
+            });
           });
       } else {
-        setIsLoading(false);
-        setPageError(ERR_MISSING_DATA);
-        setRates([]);
+        setState({ isLoading: false, pageError: ERR_MISSING_DATA, rates: [] });
       }
     };
     fetchRates();
@@ -78,8 +90,8 @@ export const HistoryChart: React.FC = () => {
 
   return (
     <>
-      {pageError ? (
-        <div className="error-message">{pageError}</div>
+      {state.pageError ? (
+        <div className="error-message">{state.pageError}</div>
       ) : (
         <>
           <div className="history-chart">
@@ -87,40 +99,43 @@ export const HistoryChart: React.FC = () => {
               Last {INIT_NUMBER_OF_HISTORY_DATES} days currency rates
             </div>
           </div>
-          {isLoading ? (
+          {state.isLoading ? (
             <Loader />
           ) : (
-            <>
-              <div className="daily-rate-chart">
-                <LineChart width={800} height={500} data={rates}>
-                  <XAxis
-                    dataKey="date"
-                    tick={{ fontSize: 12 }}
-                    angle={30}
-                    dx={15}
-                    dy={7}
-                    minTickGap={-100}
-                    axisLine={false}
-                  />
-                  <YAxis tick={{ fontSize: 12 }} />
-                  <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                  {Object.keys(rates[0]).map(
-                    (line) =>
-                      line !== "date" && (
-                        <Line
-                          key={line}
-                          type="monotone"
-                          dataKey={line}
-                          stroke={getRandomColor()}
-                        />
-                      )
-                  )}
-                </LineChart>
-              </div>
-              <div style={{ textAlign: "center" }}>
-                {LBL_SELECT_BASE_CURRENCY} : {baseCurrency.value}
-              </div>
-            </>
+            state.rates &&
+            state.rates.length > 0 && (
+              <>
+                <div className="daily-rate-chart">
+                  <LineChart width={800} height={500} data={state.rates}>
+                    <XAxis
+                      dataKey="date"
+                      tick={{ fontSize: 12 }}
+                      angle={30}
+                      dx={15}
+                      dy={7}
+                      minTickGap={-100}
+                      axisLine={false}
+                    />
+                    <YAxis tick={{ fontSize: 12 }} />
+                    <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                    {Object.keys(state.rates[0]).map(
+                      (line) =>
+                        line !== "date" && (
+                          <Line
+                            key={line}
+                            type="monotone"
+                            dataKey={line}
+                            stroke={getRandomColor()}
+                          />
+                        )
+                    )}
+                  </LineChart>
+                </div>
+                <div style={{ textAlign: "center" }}>
+                  {LBL_SELECT_BASE_CURRENCY} : {baseCurrency.value}
+                </div>
+              </>
+            )
           )}
         </>
       )}

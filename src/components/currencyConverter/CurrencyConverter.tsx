@@ -13,17 +13,28 @@ import CurrencyRate from "./CurrencyRate";
 import "./CurrencyConverter.scss";
 import Loader from "../../shared/loader/Loader";
 
+type State = {
+  pageError: string | null;
+  rates: TCurrencyRate[];
+  isLoading: boolean;
+};
+
 const CurrencyConverter: React.FC = () => {
   const { baseCurrency, targetCurrencies } = useSelector(
     (state: TStore) => state.currency
   );
   const [compareAmount, setCompareAmount] = useState<number>(1);
-  const [pageError, setPageError] = useState<string | null>(null);
-  const [rates, setRates] = useState<TCurrencyRate[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [state, setState] = useState<State>({
+    pageError: null,
+    rates: [],
+    isLoading: true,
+  });
 
   useEffect(() => {
-    setIsLoading(true);
+    setState((s) => {
+      return { ...s, isLoading: true };
+    });
+
     const fetchRates = async () => {
       if (
         baseCurrency &&
@@ -39,29 +50,36 @@ const CurrencyConverter: React.FC = () => {
             : "";
         getLatestRates(targets)
           .then((response) => {
-            setIsLoading(false);
             if (!response.error) {
-              setPageError(null);
-              setRates(
-                convertApiResponseToBaseCurreny(response, baseCurrency.value)
-              );
+              setState({
+                isLoading: false,
+                pageError: null,
+                rates: convertApiResponseToBaseCurreny(
+                  response,
+                  baseCurrency.value
+                ),
+              });
             } else {
-              setPageError(response.description);
+              setState({
+                isLoading: false,
+                pageError: response.description,
+                rates: [],
+              });
             }
           })
           .catch((e) => {
-            setIsLoading(false);
-            setPageError(ERR_RATES_FETCH);
+            setState({
+              isLoading: false,
+              pageError: ERR_RATES_FETCH,
+              rates: [],
+            });
           });
       } else {
-        setPageError(ERR_MISSING_DATA);
-        setRates([]);
-        setIsLoading(false);
+        setState({ isLoading: false, pageError: ERR_MISSING_DATA, rates: [] });
       }
-    }
+    };
 
     fetchRates();
-    
   }, [baseCurrency, targetCurrencies]);
 
   const updateCurrencies = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,21 +87,22 @@ const CurrencyConverter: React.FC = () => {
   };
 
   const swapRates = (index: number) => {
-    setRates(
-      rates.map((rate, i) => {
+    setState({
+      ...state,
+      rates: state.rates.map((rate, i) => {
         return index === i ? { ...rate, isSwaped: !rate.isSwaped } : rate;
-      })
-    );
+      }),
+    });
   };
 
   return (
     <>
-      {isLoading ? (
+      {state.isLoading ? (
         <Loader />
       ) : (
         <div className="currency-converter">
-          {pageError ? (
-            <div className="error-message">{pageError}</div>
+          {state.pageError ? (
+            <div className="error-message">{state.pageError}</div>
           ) : (
             <>
               <div className="currency-converter-amount">
@@ -96,14 +115,16 @@ const CurrencyConverter: React.FC = () => {
                 ></input>
               </div>
               <div className="currency-converter-list">
-                {rates.map((rate, i) => (
-                  <CurrencyRate
-                    key={i}
-                    rate={rate}
-                    compareAmount={compareAmount}
-                    swapRates={() => swapRates(i)}
-                  />
-                ))}
+                {state.rates &&
+                  state.rates.length > 0 &&
+                  state.rates.map((rate, i) => (
+                    <CurrencyRate
+                      key={i}
+                      rate={rate}
+                      compareAmount={compareAmount}
+                      swapRates={() => swapRates(i)}
+                    />
+                  ))}
               </div>
             </>
           )}

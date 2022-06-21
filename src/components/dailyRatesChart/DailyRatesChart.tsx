@@ -31,17 +31,27 @@ type Props = {
   setCurrDate: React.Dispatch<React.SetStateAction<string>>;
 };
 
+type State = {
+  pageError: string | null;
+  rates: TCurrencyRate[];
+  isLoading: boolean;
+};
+
 const DailyRatesChart: React.FC<Props> = (props: Props) => {
   const { currDate, setCurrDate } = props;
-  const [isLoading, setIsLoading] = useState(true);
-  const [pageError, setPageError] = useState<string | null>(null);
-  const [dailyRates, setDailyRates] = useState<TCurrencyRate[]>([]);
   const { baseCurrency, targetCurrencies } = useSelector(
     (state: TStore) => state.currency
   );
+  const [state, setState] = useState<State>({
+    pageError: null,
+    rates: [],
+    isLoading: true,
+  });
 
   useEffect(() => {
-    setIsLoading(true);
+    setState((s) => {
+      return { ...s, isLoading: true };
+    });
     const fetchRates = async () => {
       if (
         currDate &&
@@ -58,24 +68,32 @@ const DailyRatesChart: React.FC<Props> = (props: Props) => {
             : "";
         getHistoricalRates(currDate, targets)
           .then((response) => {
-            setIsLoading(false);
             if (!response.error) {
-              setPageError(null);
-              setDailyRates(
-                convertApiResponseToBaseCurreny(response, baseCurrency.value)
-              );
+              setState({
+                isLoading: false,
+                pageError: null,
+                rates: convertApiResponseToBaseCurreny(
+                  response,
+                  baseCurrency.value
+                ),
+              });
             } else {
-              setPageError(response.description);
+              setState({
+                isLoading: false,
+                pageError: response.description,
+                rates: [],
+              });
             }
           })
           .catch((e) => {
-            setIsLoading(false);
-            setPageError(ERR_RATES_FETCH);
+            setState({
+              isLoading: false,
+              pageError: ERR_RATES_FETCH,
+              rates: [],
+            });
           });
       } else {
-        setIsLoading(false);
-        setPageError(ERR_MISSING_DATA);
-        setDailyRates([]);
+        setState({ isLoading: false, pageError: ERR_MISSING_DATA, rates: [] });
       }
     };
     fetchRates();
@@ -83,8 +101,8 @@ const DailyRatesChart: React.FC<Props> = (props: Props) => {
 
   return (
     <>
-      {pageError ? (
-        <div className="error-message">{pageError}</div>
+      {state.pageError ? (
+        <div className="error-message">{state.pageError}</div>
       ) : (
         <>
           <div className="date-navigator">
@@ -107,13 +125,13 @@ const DailyRatesChart: React.FC<Props> = (props: Props) => {
               )}
             </div>
           </div>
-          {isLoading ? (
+          {state.isLoading ? (
             <Loader />
           ) : (
             <>
               <div className="daily-rate-chart">
-                {dailyRates && dailyRates.length > 0 && (
-                  <BarChart width={700} height={400} data={dailyRates}>
+                {state.rates && state.rates.length > 0 && (
+                  <BarChart width={700} height={400} data={state.rates}>
                     <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                     <XAxis dataKey="currency" tick={{ fontSize: 12 }} />
                     <YAxis tick={{ fontSize: 12 }} />
