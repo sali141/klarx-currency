@@ -1,53 +1,56 @@
-import React, { useEffect, useState } from "react";
-import { TCurrency } from "../../types/currencyTypes";
-import CurrencySelector from "../../shared/currencySelector/CurrencySelector";
-import {
-  LBL_SELECT_BASE_CURRENCY,
-  LBL_SELECT_TARGET_CURRENCIES,
-} from "../../const/labelConst";
+import React, { Reducer, useEffect, useReducer } from "react";
 import { useDispatch } from "react-redux";
 import {
+  LBL_SELECT_BASE_CURRENCY,
+  LBL_SELECT_TARGET_CURRENCIES
+} from "../../const/labelConst";
+import { ERR_FIELD_REQUIRED } from "../../const/messagesConst";
+import CurrencySelector from "../../shared/currencySelector/CurrencySelector";
+import {
   setBaseCurrencyReducer,
-  setTargetCurrenciesReducer,
+  setTargetCurrenciesReducer
 } from "../../slices/currencySlice";
+import { TCurrency } from "../../types/currencyTypes";
 import {
   getInitialBaseCurrency,
-  getInitialTargetCurrencies,
+  getInitialTargetCurrencies
 } from "../../utils/helpers";
-import { ERR_FIELD_REQUIRED } from "../../const/messagesConst";
 
 type Props = {
   currencies: TCurrency[];
 };
 
+type State = {
+  baseCurrency : TCurrency;
+  targetCurrencies : TCurrency[]
+}
+
 const CurrencyControl: React.FC<Props> = (props: Props) => {
   const { currencies } = props;
   const dispatch = useDispatch();
-  const [baseCurrency, setBaseCurrency] = useState<TCurrency>();
-  const [targetCurrencies, setTargetCurrencies] = useState<TCurrency[]>();
+  const [state, setState] = useReducer<Reducer<State, Partial<State>>>(
+    (state, newState) => ({...state, ...newState}),
+    {baseCurrency: {label :"" , value : ""}, targetCurrencies: []}
+  )
 
   useEffect(() => {
-    setBaseCurrency(getInitialBaseCurrency(currencies));
+    setState({baseCurrency : getInitialBaseCurrency(currencies) , targetCurrencies : getInitialTargetCurrencies(currencies)})
   }, [currencies]);
 
   useEffect(() => {
-    setTargetCurrencies(getInitialTargetCurrencies(currencies));
-  }, [currencies]);
+    dispatch(setBaseCurrencyReducer(state.baseCurrency));
+  }, [state.baseCurrency, dispatch]);
 
   useEffect(() => {
-    dispatch(setBaseCurrencyReducer(baseCurrency));
-  }, [baseCurrency, dispatch]);
-
-  useEffect(() => {
-    dispatch(setTargetCurrenciesReducer(targetCurrencies));
-  }, [targetCurrencies, dispatch]);
+    dispatch(setTargetCurrenciesReducer(state.targetCurrencies));
+  }, [state.targetCurrencies, dispatch]);
 
   const onBaseCurrencyChange = (e: TCurrency) => {
-    setBaseCurrency(e);
+    setState({baseCurrency : e})
   };
 
   const onTargetCurrencyChange = (e: TCurrency[]) => {
-    setTargetCurrencies(e);
+    setState({targetCurrencies : e})
   };
 
   return (
@@ -59,10 +62,10 @@ const CurrencyControl: React.FC<Props> = (props: Props) => {
           isClearable={false}
           options={currencies}
           onSelect={onBaseCurrencyChange}
-          value={baseCurrency}
+          value={state.baseCurrency}
         />
       </div>
-      {baseCurrency && baseCurrency.value === "" && (
+      {state.baseCurrency && state.baseCurrency.value === "" && (
         <div className="field-error">{ERR_FIELD_REQUIRED}</div>
       )}
       <label>{LBL_SELECT_TARGET_CURRENCIES} :</label>
@@ -71,9 +74,9 @@ const CurrencyControl: React.FC<Props> = (props: Props) => {
         isClearable={true}
         options={currencies}
         onSelect={onTargetCurrencyChange}
-        value={targetCurrencies}
+        value={state.targetCurrencies}
       />
-      {targetCurrencies?.length === 0 && (
+      {state.targetCurrencies?.length === 0 && (
         <div className="field-error">{ERR_FIELD_REQUIRED}</div>
       )}
     </div>
