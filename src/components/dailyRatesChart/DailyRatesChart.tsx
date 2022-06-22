@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from "react";
 import {
   IoIosArrowDropleftCircle,
-  IoIosArrowDroprightCircle,
+  IoIosArrowDroprightCircle
 } from "react-icons/io";
 import { useSelector } from "react-redux";
 import {
   Bar,
   BarChart,
   CartesianGrid,
-  LabelList,
-  ResponsiveContainer,
-  XAxis,
-  YAxis,
+  LabelList, XAxis,
+  YAxis
 } from "recharts";
 import { LBL_SELECT_BASE_CURRENCY } from "../../const/labelConst";
 import { ERR_MISSING_DATA, ERR_RATES_FETCH } from "../../const/messagesConst";
@@ -23,7 +21,7 @@ import {
   convertApiResponseToBaseCurreny,
   convertDatetoString,
   convertToCurrencyStringArray,
-  getPrevNextDate,
+  getPrevNextDate
 } from "../../utils/helpers";
 import "./DailyRatesChart.scss";
 
@@ -132,8 +130,7 @@ const DailyRatesChart: React.FC<Props> = (props: Props) => {
             <>
               <div className="daily-rate-chart">
                 {state.rates && state.rates.length > 0 && (
-                  <ResponsiveContainer width={700} height={400}>
-                  <BarChart data={state.rates}>
+                   <BarChart width={700} height={400} data={state.rates}>
                     <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                     <XAxis dataKey="currency" tick={{ fontSize: 12 }} />
                     <YAxis tick={{ fontSize: 12 }} />
@@ -149,7 +146,6 @@ const DailyRatesChart: React.FC<Props> = (props: Props) => {
                       />
                     </Bar>
                   </BarChart>
-                  </ResponsiveContainer>
                 )}
               </div>
               <div style={{ textAlign: "center" }}>
