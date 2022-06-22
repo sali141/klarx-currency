@@ -46,7 +46,7 @@ const App: React.FC = () => {
       {state.isLoading ? (
         <div>Loading....</div>
       ) : state.pageError ? (
-        <div className="errorMessage">{state.pageError}</div>
+        <div className="error-message">{state.pageError}</div>
       ) : (
         <Dashboard />
       )}

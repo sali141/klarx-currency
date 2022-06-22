@@ -1,4 +1,5 @@
 import { API_BASE_URL, API_KEY } from "../config";
+import { ERR_CURRENCY_FETCH, ERR_RATES_FETCH } from "../const/messagesConst";
 import { TDateRates } from "../types/chartTypes";
 import { convertApiResponseToBaseCurreny } from "./helpers";
 
@@ -11,7 +12,7 @@ export const getCurrencies = async () => {
       .then((res) => JSON.parse(res));
     return response;
   } catch (e) {
-    return e;
+    return {error : true , description : ERR_CURRENCY_FETCH};
   }
 };
 
@@ -24,7 +25,7 @@ export const getLatestRates = async (targets: string) => {
       .then((res) => JSON.parse(res));
     return response;
   } catch (e) {
-    return e;
+    return {error : true , description :  ERR_RATES_FETCH};
   }
 };
 
@@ -37,7 +38,7 @@ export const getHistoricalRates = async (dateStr: string, targets: string) => {
       .then((res) => JSON.parse(res));
     return response;
   } catch (e) {
-    return e;
+    return {error : true , description : ERR_RATES_FETCH};
   }
 };
 
