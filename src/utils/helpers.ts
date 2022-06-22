@@ -49,26 +49,31 @@ export const convertApiResponseToBaseCurreny = (
 };
 
 export const convertDatetoString = (date: Date) => {
-  const mm = date.getMonth() + 1; 
+  const mm = date.getMonth() + 1;
   const dd = date.getDate();
-  return [date.getFullYear(),
-    (mm > 9 ? '' : '0') + mm,
-    (dd>9 ? '' : '0') + dd
-   ].join('-');
+  return [
+    date.getFullYear(),
+    (mm > 9 ? "" : "0") + mm,
+    (dd > 9 ? "" : "0") + dd,
+  ].join("-");
 };
 
-export const getPrevNextDate = (currDate :string , isNext : boolean, numDates : number) => {
+export const getPrevNextDate = (
+  currDate: string,
+  isNext: boolean,
+  numDates: number
+) => {
   const modifier = isNext ? numDates : -numDates;
   const currDateObj = new Date(currDate);
-  currDateObj.setDate(currDateObj.getDate() + (modifier * 1));
+  currDateObj.setDate(currDateObj.getDate() + modifier * 1);
   return convertDatetoString(currDateObj);
-}
+};
 
-export const getRandomColor = ()=>{
-  const letters = '0123456789ABCDEF';
-  let color = '#';
+export const getRandomColor = () => {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
   for (let i = 0; i < 6; i++) {
     color += letters[Math.floor(Math.random() * 16)];
   }
   return color;
-}
+};

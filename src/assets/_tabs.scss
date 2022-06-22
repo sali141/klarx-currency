@@ -61,3 +61,13 @@
     }
   }
 }
+
+@media only screen and (max-width: 600px) {
+  .react-tabs {
+    width: 90%;
+    &__tab { 
+      font-size: 0.7em;
+    }
+  }
+}
+

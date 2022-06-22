@@ -6,33 +6,47 @@ import { getCurrencies } from "./utils/apiUtils";
 import { getCurrencySelectOptions } from "./utils/helpers";
 import "./App.scss";
 
-const App: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [pageError, setPageError] = useState<string | null>(null);
+type State = {
+  pageError: string | null;
+  isLoading: boolean;
+};
 
+const App: React.FC = () => {
+  const [state, setState] = useState<State>({
+    pageError: null,
+    isLoading: true,
+  });
   const dispatch = useDispatch();
 
   useEffect(() => {
+    setState((s) => {
+      return { ...s, isLoading: true };
+    });
     const fetchCurrencies = async () => {
       getCurrencies().then((response) => {
         if (!response.error) {
-          setPageError(null);
+          setState({
+            isLoading: false,
+            pageError: null,
+          });
           dispatch(setCurrencyListReducer(getCurrencySelectOptions(response)));
         } else {
-          setPageError(response.description);
+          setState({
+            isLoading: false,
+            pageError: response.description,
+          });
         }
-        setIsLoading(false);
       });
     }
     fetchCurrencies();
-  });
+  },[dispatch]);
 
   return (
     <div className="main">
-      {isLoading ? (
+      {state.isLoading ? (
         <div>Loading....</div>
-      ) : pageError ? (
-        <div className="errorMessage">{pageError}</div>
+      ) : state.pageError ? (
+        <div className="errorMessage">{state.pageError}</div>
       ) : (
         <Dashboard />
       )}

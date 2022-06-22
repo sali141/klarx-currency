@@ -54,3 +54,22 @@
     }
   }
 }
+
+
+@media only screen and (max-width: 600px) {
+  .currency-converter {
+
+    &-list {
+      display: block;
+    }
+
+    &-item {
+      padding: 0.8em 1.2em;
+      border: 1px solid $theme-line-gray;
+      border-radius: 4px;
+      margin: 0 0.2em 0.6em;
+      font-size: 0.7em;
+      display: flex;
+    }
+  }
+}

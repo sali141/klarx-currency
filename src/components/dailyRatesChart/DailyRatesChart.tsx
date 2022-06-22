@@ -9,6 +9,7 @@ import {
   BarChart,
   CartesianGrid,
   LabelList,
+  ResponsiveContainer,
   XAxis,
   YAxis,
 } from "recharts";
@@ -131,7 +132,8 @@ const DailyRatesChart: React.FC<Props> = (props: Props) => {
             <>
               <div className="daily-rate-chart">
                 {state.rates && state.rates.length > 0 && (
-                  <BarChart width={700} height={400} data={state.rates}>
+                  <ResponsiveContainer width={700} height={400}>
+                  <BarChart data={state.rates}>
                     <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                     <XAxis dataKey="currency" tick={{ fontSize: 12 }} />
                     <YAxis tick={{ fontSize: 12 }} />
@@ -147,6 +149,7 @@ const DailyRatesChart: React.FC<Props> = (props: Props) => {
                       />
                     </Bar>
                   </BarChart>
+                  </ResponsiveContainer>
                 )}
               </div>
               <div style={{ textAlign: "center" }}>

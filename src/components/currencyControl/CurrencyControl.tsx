@@ -55,7 +55,7 @@ const CurrencyControl: React.FC<Props> = (props: Props) => {
   return (
     <div className="dashboard-currency-control">
       <label>{LBL_SELECT_BASE_CURRENCY} :</label>
-      <div style={{ width: "50%" }}>
+      <div style={{ width: "80%" }}>
         <CurrencySelector
           isMulti={false}
           isClearable={false}
